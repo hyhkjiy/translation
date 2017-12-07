@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8
+from __future__ import print_function
 import os
 import sys
 import json
@@ -33,7 +34,7 @@ if __name__ == '__main__':
         json.dump(history, open(HISTORY_FILE, 'w'))
         data = dictionary.get(words)
         if not data:
-            response = requests.get(f'http://fanyi.youdao.com/openapi.do?keyfrom=HTransPlugin&key=260187501&type=data&doctype=json&version=1.1&q={words}')
+            response = requests.get('http://fanyi.youdao.com/openapi.do?keyfrom=HTransPlugin&key=260187501&type=data&doctype=json&version=1.1&q=%s' % words)
             data = response.json()
             dictionary[words] = data
             history['dictionary'] = dictionary
@@ -54,7 +55,7 @@ if __name__ == '__main__':
         history_list = history.get('history', [])
         counter = Counter([i.get('words') for i in history_list])
         for i, item in enumerate(counter.most_common(top_num)):
-            print(f'\ttop{i + 1}:{item[0]}\t{item[1]}次')
+            print('\t%s:%s\t%s次'%(str(i + 1), item[0], item[1]))
     elif args.l != 0:
         list_len = args.l or 20
         history_list = history.get('history', [])[::-1][:list_len]
